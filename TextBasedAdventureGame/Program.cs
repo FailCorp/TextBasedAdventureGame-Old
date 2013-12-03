@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Inventory;
 using System.IO;
+using System.Threading;
 
 namespace TextBasedAdventureGame
 {
@@ -15,7 +16,7 @@ namespace TextBasedAdventureGame
             Game theGame = new Game();
             theGame.reset();
 
-            //theGame.StartGame();
+            theGame.StartGame();
 
             while (theGame.getPlaying() == true)
             {
@@ -23,6 +24,10 @@ namespace TextBasedAdventureGame
             }
         }
     }
+
+
+
+    
 
     public class Game
     {
@@ -243,9 +248,11 @@ namespace TextBasedAdventureGame
             System.Threading.Thread.Sleep(2000);
             Console.Clear();
 
+            System.Threading.Thread.Sleep(2000);
+
             Console.Beep(200, 400);
             Console.Beep(100, 400);
-            Console.Beep(400, 900);
+            Console.Beep(300, 900);
 
             Console.WriteLine(" _______  _______ _________ _ ");
             Console.WriteLine("|  ____ \\(  ___  )\\__   __/( \\");
@@ -268,7 +275,7 @@ namespace TextBasedAdventureGame
             Console.WriteLine("(____\\/_)(_______)(_______/\\_______)   )_(  ");
             Console.Beep(200, 400);
             Console.Beep(100, 400);
-            Console.Beep(400, 900);
+            Console.Beep(300, 900);
 
             System.Threading.Thread.Sleep(3000);
             Console.Clear();
@@ -347,6 +354,15 @@ namespace TextBasedAdventureGame
                     Mill();
                     break;
 
+                case "TOWN":
+                case "GO TO TOWN":
+                case "town":
+                case "Go to the TOWN":
+                case "go to the town":
+                case "go to the TOWN":
+                    Town();
+                    break;
+
                 case "BASEMENT":
                 case "GO TO BASEMENT":
                 case "GO TO THE BASEMENT":
@@ -379,7 +395,6 @@ namespace TextBasedAdventureGame
 
                 case "EXIT":
                     break;
-
             }
         }
 
@@ -414,6 +429,7 @@ namespace TextBasedAdventureGame
 
         private void FieldOfShit()
         {
+            bool atField = true;
             Console.Clear();
             Console.WriteLine("As you approach the field you notice a fairly recognizable smell");
             Console.WriteLine("You realize it is the smell of feces, but you are unable to ");
@@ -425,12 +441,45 @@ namespace TextBasedAdventureGame
             Console.WriteLine("Go to the FOREST.");
             Console.WriteLine("Look around.");
             Console.WriteLine("Check Inventory.");
+
+            while (atField == true)
+            {
+                Console.WriteLine("What do you choose to do?");
+                Console.WriteLine("Go to the RIVER.");
+                Console.WriteLine("Go to the MILL.");
+                Console.WriteLine("Go to the FOREST.");
+                Console.WriteLine("Look around.");
+                Console.WriteLine("Check Inventory.");
+                string input = Console.ReadLine();
+
+                switch (input.ToUpper())
+                {
+                    case "Go to the RIVER":
+                        //TODO: Check to see if you have the rope. If you do, you can cross. Otherwise you die.
+                        River();
+                        break;
+
+                    case "Go to the MILL":
+                        atField = false;
+                        Mill();
+                        break;
+
+                    case "Go to the FOREST":
+                        atField = false;
+                        Forest();
+                        break;
+
+                    case "Check Inventory":
+
+                        break;
+                }
+            }
         }
 
         private void River()
         {
+            bool atRiver = true;
             Console.Clear();
-
             Console.WriteLine("You approach the river with caution as the rapids could easily pull you");
             Console.WriteLine(" in and make short work of you. A ROPE could be quite handy right now...\n");
             Console.WriteLine("What do you choose to do?");
@@ -439,7 +488,33 @@ namespace TextBasedAdventureGame
             Console.WriteLine("Look around.");
             Console.WriteLine("Check Inventory.");
 
-            //Add an if statement that checks for rope, if rope is in inventory you may cross the river
+            while (atRiver == true)
+            {
+                Console.WriteLine("What do you choose to do?");
+                Console.WriteLine("Go to the FIELD.");
+                Console.WriteLine("Cross the RIVER.");
+                Console.WriteLine("Look around.");
+                Console.WriteLine("Check Inventory.");
+                string input = Console.ReadLine();
+
+                switch (input.ToUpper())
+                {
+                    case "Cross the RIVER":
+                       //TODO: Check to see if you have the rope. If you do, you can cross. Otherwise you die.
+                        atRiver = false;
+                        Quarry();
+                        break;
+
+                    case "Go to the FIELD":
+                        atRiver = false;
+                        FieldOfShit();
+                        break;
+
+                    case "Check Inventory":
+
+                        break;
+                }
+            }
         }
 
         private void Quarry()
@@ -551,8 +626,14 @@ namespace TextBasedAdventureGame
             Console.WriteLine("Check Inventory.");
         }
 
+        private void ForestMaze()
+        {
+           // Console.WriteLine();
+        }
+
         private void Forest()
         {
+            bool inForest = true;
             Console.Clear();
             Console.WriteLine("The FOREST is dark and crawling with danger. There is a small narrow ");
             Console.WriteLine("path leading into the arbour of death. As you enter, you hear something ");
@@ -564,6 +645,29 @@ namespace TextBasedAdventureGame
             Console.WriteLine("Go to the FIELD.");
             Console.WriteLine("Look around.");
             Console.WriteLine("Check Inventory.");
+            while (inForest == true)
+            {
+                Console.WriteLine("What do you choose to do?");
+                Console.WriteLine("Enter the FOREST");
+                Console.WriteLine("Go to the FIELD");
+                Console.WriteLine("Check Inventory.");
+                string input = Console.ReadLine();
+
+                switch (input.ToUpper())
+                {
+                    case "Enter the FOREST":
+                        ForestMaze();
+                        break;
+
+                    case "Go to the FIELD":
+                        FieldOfShit();
+                        break;
+
+                    case "Check Inventory":
+
+                        break;
+                }
+            }
         }
 
         private void Basement()
@@ -587,6 +691,7 @@ namespace TextBasedAdventureGame
 
         private void Town()
         {
+            bool inTown = false;
             Console.Clear();
             Console.WriteLine("You enter the town and the smell of baked goods and leather assult ");
             Console.WriteLine("your nostrils. The pleasant and familiar smell relaxes you and calms ");
@@ -594,11 +699,45 @@ namespace TextBasedAdventureGame
             Console.WriteLine("air. To your left is the BLACKSMITH's, to your right is the TAVERN and ");
             Console.WriteLine("in front of you lies the gates to the CASTLE.");
             Console.WriteLine("What do you choose to do?");
-            Console.WriteLine("Go to the BLACKSMITH.");
-            Console.WriteLine("Go to the TAVERN.");
-            Console.WriteLine("Go to the CASTLE.");
-            Console.WriteLine("Look around.");
-            Console.WriteLine("Check Inventory.");
+
+            while (inTown == true)
+            {
+                Console.WriteLine("What do you choose to do?");
+                Console.WriteLine("Go to the BLACKSMITH.");
+                Console.WriteLine("Go to the TAVERN.");
+                Console.WriteLine("Go to the CASTLE.");
+                Console.WriteLine("Go to the FIELD");
+                Console.WriteLine("Check Inventory.");
+                string input = Console.ReadLine();
+
+                switch (input.ToUpper())
+                {
+                    case "Go to the BLACKSMITH":
+                        Blacksmith();
+                        inTown = false;
+                        break;
+
+                    case "Go to the TAVERN":
+                        Tavern();
+                        inTown = false;
+                        break;
+
+                    case "Go to the CASTLE":
+                        Castle();
+                        inTown = false;
+                        break;
+
+                    case "Go to the FIELD":
+                        inTown = false;
+                        FieldOfShit();
+
+                        break;
+
+                    case "Check Inventory":
+                        
+                        break;
+                }
+            }
         }
 
         private void Blacksmith()
@@ -623,7 +762,7 @@ namespace TextBasedAdventureGame
                 Console.WriteLine("Go to the TOWN");
                 string input = Console.ReadLine();
 
-                switch (input)
+                switch (input.ToUpper())
                 {
                         //You are an idiot. Have fun dying
                     case "Tell the BLACKSMITH you don't like his face":
@@ -632,31 +771,37 @@ namespace TextBasedAdventureGame
                     case "tell the blacksmith you don't like his face":
                         {
                             Console.Clear();
-                            Console.WriteLine("The already miserable blacksmith, insulted by your words, is clearly not happy.He hurls his white-hot hammer across the room,\n and the hammer-head collides with your forehead, cracking your head wide open. ");
+                            Console.WriteLine("The already miserable blacksmith, insulted by your words, is clearly not happy.\n He hurls his white-hot hammer across the room, and the hammer-head collides with your forehead,\n cracking your head wide open. ");
                             System.Threading.Thread.Sleep(4000);
                             inBlacksmith = false;
                             gameOver();
                             break;
                         }
-
                         //Got the gem? He lets you keep it
                     case "Talk to Blacksmith":
                     case "Talk to blacksmith":
                     case "talk to Blacksmith":
                     case "talk to blacksmith":
                         {
-                            Console.WriteLine("");
+                            Console.WriteLine("You approach the blacksmith...");
+                            if (gotGem == true)
+                            {
+                                Console.WriteLine("He notices the gem you have found, and tells you that you can have it.");
+                                angryBlacksmith = false;
+                            }
+                            else //Don't got the gem? He doesnt care.
+                            {
+                                Console.WriteLine("He quickly realizes you have nothing particularly important to say, and returns his attention to his anvil.");
+                            }
                             break;
                         }
 
                         //You find a gem. Its pretty
                     case "look around":
                     case "Look around":
-
                         {
-
                             Console.WriteLine("You take a look around the blacksmith's workplace.\n After rudely sifting through various piles of stuff, you find a large, shiny gemstone.\nYou take it.");
-                            
+                            gotGem = true;
                             break;
                         }
 
@@ -666,7 +811,6 @@ namespace TextBasedAdventureGame
                     case "Check Inventory":
                     case "check INVENTORY":
                         {
-
                             break;
                         }
 
@@ -684,6 +828,8 @@ namespace TextBasedAdventureGame
                                 System.Threading.Thread.Sleep(4000);
                                 gameOver();
                                 inBlacksmith = false;
+                                gotGem = false;
+                                
                                 break;
                             }
                             else
@@ -693,8 +839,6 @@ namespace TextBasedAdventureGame
                                 break;
                             }
                         }
-
-
                 }
             }
         }
@@ -779,7 +923,7 @@ namespace TextBasedAdventureGame
         }
 
         private void Castle()
-        {
+        { 
             Console.Clear();
             Console.WriteLine("");
             Console.WriteLine("");
